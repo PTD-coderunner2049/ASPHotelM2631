@@ -1,3 +1,6 @@
 <Solution>
-  <Project Path="ASPHotelM2631.Web.csproj" />
+  <Project Path="ASPHotelM2631.Application/ASPHotelM2631.Application.csproj" Id="66207a40-9471-499e-af9f-07ee5f0b182d" />
+  <Project Path="ASPHotelM2631.Domain/ASPHotelM2631.Domain.csproj" Id="014984fb-6120-43fd-a611-b1762d4ee949" />
+  <Project Path="ASPHotelM2631.Infrastructure/ASPHotelM2631.Infrastructure.csproj" Id="9f58a1de-e018-491c-bf64-066f7a1264d9" />
+  <Project Path="ASPHotelM2631.Web/ASPHotelM2631.Web.csproj" Id="e4e96dad-a9e8-4b9c-8d4a-d8d550c657ad" />
 </Solution>
