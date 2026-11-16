@@ -1,6 +1,6 @@
 # Git Commit Message Guide
 
-This guide defines the commit message format for the ASPHotelM2631 team. Clear commit messages make the project history easier to understand, review, and maintain.
+This guide defines the commit message format for the ASPHotelM2631.Web team. Clear commit messages make the project history easier to understand, review, and maintain.
 
 ## Commit message format
 

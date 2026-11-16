@@ -1,8 +1,8 @@
-using ASPHotelM2631.Models;
+using ASPHotelM2631.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace ASPHotelM2631.Controllers
+namespace ASPHotelM2631.Web.Controllers
 {
     public class HomeController : Controller
     {

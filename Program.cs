@@ -1,4 +1,4 @@
-namespace ASPHotelM2631
+namespace ASPHotelM2631.Web
 {
     public class Program
     {
