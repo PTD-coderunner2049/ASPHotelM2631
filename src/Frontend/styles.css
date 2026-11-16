@@ -1,0 +1,47 @@
+:root{--ink:#16263a;--sea:#e9f1ef;--brass:#b5853a;--brass-d:#8a621f;--line:#d3dedb;--muted:#5a6b78;--err:#b3261e}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{font-family:"Be Vietnam Pro",system-ui,"Segoe UI",sans-serif;color:var(--ink);background:var(--sea);line-height:1.5}
+.shell{display:grid;grid-template-columns:minmax(300px,5fr) 6fr;min-height:100vh}
+
+.brand{background:var(--ink);color:#fff;display:flex;flex-direction:column;justify-content:space-between;padding:40px}
+.brand h1{font-size:1.1rem;font-weight:600;margin:0}
+.plaque{align-self:center;border:2px solid var(--brass);padding:28px 40px;text-align:center;outline:1px solid var(--brass);outline-offset:6px}
+.plaque small{display:block;color:var(--brass);font-size:.9rem;font-weight:500;margin-bottom:4px}
+.plaque b{display:block;font-size:clamp(3.5rem,8vw,6rem);font-weight:700;line-height:1;color:#f3e3c3}
+.brand p{margin:0;color:#b9c6d2;max-width:30ch;font-size:.95rem}
+
+.panel{display:flex;align-items:center;justify-content:center;padding:32px 20px}
+.card{width:100%;max-width:420px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:32px}
+h2{font-size:1.5rem;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 8px;font-size:.95rem}
+
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--sea);padding:4px;border-radius:8px;margin-bottom:22px}
+.tabs button{border:0;background:transparent;padding:9px;border-radius:6px;font:inherit;font-weight:500;color:var(--muted);cursor:pointer}
+.tabs button[aria-selected=true]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(22,38,58,.15)}
+
+label{display:block;font-weight:500;font-size:.9rem;margin:14px 0 6px}
+input[type=text],input[type=password]{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:6px;font:inherit;color:var(--ink);background:#fff}
+input:focus-visible,button:focus-visible{outline:3px solid rgba(181,133,58,.55);outline-offset:1px}
+input.bad{border-color:var(--err)}
+.err{color:var(--err);font-size:.82rem;min-height:1.1em;margin-top:4px}
+.pw{position:relative}
+.pw button{position:absolute;right:6px;top:6px;border:0;background:none;color:var(--muted);font:inherit;font-size:.85rem;padding:5px 8px;cursor:pointer}
+.check{display:flex;gap:8px;align-items:flex-start;font-weight:400;margin:16px 0 0;font-size:.88rem}
+.check input{margin-top:3px}
+.btn{width:100%;margin-top:20px;padding:12px;border:0;border-radius:6px;background:var(--ink);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+.btn:hover{background:#0f1c2c}
+.btn:disabled{opacity:.65;cursor:wait}
+.msg{margin-top:14px;padding:10px 12px;border-radius:6px;font-size:.88rem;display:none;background:#fbeceb;color:var(--err)}
+.msg.on{display:block}
+.switch{margin:18px 0 0;text-align:center;font-size:.9rem;color:var(--muted)}
+.switch button{border:0;background:none;color:var(--brass-d);font:inherit;font-weight:500;text-decoration:underline;cursor:pointer;padding:0}
+
+@media(max-width:760px){
+  .shell{grid-template-columns:1fr}
+  .brand{padding:20px;flex-direction:row;align-items:center;gap:16px}
+  .brand p{display:none}
+  .plaque{padding:8px 16px;outline:0;align-self:auto}
+  .plaque small{display:none}.plaque b{font-size:1.8rem}
+  .card{padding:24px 20px}
+}
