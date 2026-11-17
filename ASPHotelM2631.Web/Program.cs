@@ -1,3 +1,9 @@
+using ASPHotelM2631.Application.Authentication;
+using ASPHotelM2631.Infrastructure.Identity;
+using ASPHotelM2631.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 namespace ASPHotelM2631.Web
 {
     public class Program
@@ -6,7 +12,20 @@ namespace ASPHotelM2631.Web
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' was not configured.");
+
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(connectionString));
+
+            builder.Services
+                .AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<IAccountStore, IdentityAccountStore>();
+            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
@@ -22,6 +41,7 @@ namespace ASPHotelM2631.Web
             app.UseHttpsRedirection();
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapStaticAssets();

@@ -14,6 +14,8 @@
     <PackageReference Include="NuGet.Protocol" Version="6.12.5" PrivateAssets="all" />
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="9.0.23" PrivateAssets="all" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.23" PrivateAssets="all" />
+    <ProjectReference Include="..\ASPHotelM2631.Application\ASPHotelM2631.Application.csproj" />
+    <ProjectReference Include="..\ASPHotelM2631.Infrastructure\ASPHotelM2631.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
