@@ -30,6 +30,9 @@ public sealed class AuthController(IAuthenticationService auth) : ControllerBase
             AuthenticationStatus.Succeeded => StatusCode(201, new
             {
                 message = "Đăng nhập thành công.",
+                tokenType = "Bearer",
+                token = result.Token,
+                expiresAt = result.ExpiresAt,
                 user = new { id = result.UserId, fullName = result.FullName, role = result.Role }
             }),
             AuthenticationStatus.LockedOut => StatusCode(423, new { message = "Tài khoản bị khóa tạm thời. Vui lòng thử lại sau 15 phút." }),
@@ -42,9 +45,10 @@ public sealed class AuthController(IAuthenticationService auth) : ControllerBase
     [HttpGet("sessions/current")]
     public IActionResult Current() => Ok(new
     {
-        id = User.FindFirstValue(ClaimTypes.NameIdentifier),
-        userName = User.Identity?.Name,
-        role = User.FindFirstValue(ClaimTypes.Role)
+        id = User.FindFirstValue("sub"),
+        fullName = User.FindFirstValue("fullName"),
+        userName = User.FindFirstValue("name"),
+        role = User.FindFirstValue("role")
     });
 
     [Authorize]

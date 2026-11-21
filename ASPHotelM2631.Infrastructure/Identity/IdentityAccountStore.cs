@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using ASPHotelM2631.Application.Authentication;
 using ASPHotelM2631.Domain.Constants;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +9,7 @@ namespace ASPHotelM2631.Infrastructure.Identity;
 public sealed class IdentityAccountStore(
     UserManager<ApplicationUser> users,
     SignInManager<ApplicationUser> signIn,
+    ITokenService tokens,
     IHttpContextAccessor http) : IAccountStore
 {
     public async Task<AuthenticationStatus> CreateAsync(string fullName, string identifier, string password)
@@ -37,25 +39,26 @@ public sealed class IdentityAccountStore(
         if (user is null) return AuthenticationStatus.InvalidCredentials;
 
         // Kiểm tra mật khẩu + đếm số lần sai + khóa tài khoản + gửi cookie, tất cả trong một lệnh
-        var result = await signIn.PasswordSignInAsync(user, password,
-            isPersistent: false, lockoutOnFailure: true);
+        var result = await signIn.CheckPasswordSignInAsync(user, password, lockoutOnFailure: true);
         if (result.IsLockedOut) return AuthenticationStatus.LockedOut;
         if (!result.Succeeded) return AuthenticationStatus.InvalidCredentials;
 
         var roles = await users.GetRolesAsync(user);
-        return new LoginResult(AuthenticationStatus.Succeeded, user.Id, user.FullName, roles.FirstOrDefault());
+        var (token, expires) = tokens.CreateToken(
+            user.Id, user.UserName!, user.FullName, roles, user.SecurityStamp!);
+
+        return new LoginResult(AuthenticationStatus.Succeeded, user.Id, user.FullName, 
+        roles.FirstOrDefault(), token, expires);
     }
 
     public async Task SignOutAsync()
     {
         // Đổi security stamp để mọi cookie cũ của người này mất hiệu lực ngay phía server
         // (kể cả khi ai đó đã chép trộm cookie). Đổi lại: đăng xuất luôn cả các thiết bị khác.
-        var principal = http.HttpContext?.User;
-        if (principal?.Identity?.IsAuthenticated == true)
-        {
-            var user = await users.GetUserAsync(principal);
-            if (user is not null) await users.UpdateSecurityStampAsync(user);
-        }
-        await signIn.SignOutAsync();   // xóa cookie ở trình duyệt
+        var id = http.HttpContext?.User.FindFirstValue("sub");
+        if (id is null) return;
+
+        var user = await users.FindByIdAsync(id);
+        if (user is not null) await users.UpdateSecurityStampAsync(user);
     }
 }

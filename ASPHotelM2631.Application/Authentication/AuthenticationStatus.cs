@@ -10,7 +10,10 @@ public sealed record LoginResult(
     AuthenticationStatus Status,
     string? UserId = null,
     string? FullName = null,
-    string? Role = null)
+    string? Role = null,
+    string? Token = null,
+    DateTime? ExpiresAt = null
+    )
 {
     // Cho phép viết gọn: return AuthenticationStatus.LockedOut;
     public static implicit operator LoginResult(AuthenticationStatus status) => new(status);
