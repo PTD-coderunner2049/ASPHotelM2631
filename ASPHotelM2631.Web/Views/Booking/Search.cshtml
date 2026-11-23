@@ -1,0 +1,108 @@
+@{
+    ViewData["Title"] = "Tìm và đặt phòng";
+}
+
+<section class="booking-page">
+    <div class="booking-intro">
+        <div>
+            <p class="booking-eyebrow">AURORA HOTEL · ĐÀ NẴNG</p>
+            <h1>Tìm phòng cho kỳ nghỉ của bạn</h1>
+            <p>Chọn thời gian lưu trú và số lượng khách để xem các hạng phòng phù hợp.</p>
+        </div>
+        <div class="booking-benefits" aria-label="Ưu điểm đặt phòng">
+            <span>✓ Xác nhận nhanh</span>
+            <span>✓ Hỗ trợ 24/7</span>
+        </div>
+    </div>
+
+    <form class="booking-search-form" data-booking-search>
+        <label>
+            <span>Nhận phòng</span>
+            <input type="date" name="checkIn" required />
+        </label>
+        <label>
+            <span>Trả phòng</span>
+            <input type="date" name="checkOut" required />
+        </label>
+        <label>
+            <span>Người lớn</span>
+            <select name="adults">
+                <option value="1">1 người lớn</option>
+                <option value="2" selected>2 người lớn</option>
+                <option value="3">3 người lớn</option>
+                <option value="4">4 người lớn</option>
+            </select>
+        </label>
+        <label>
+            <span>Trẻ em</span>
+            <select name="children">
+                <option value="0" selected>Không có trẻ em</option>
+                <option value="1">1 trẻ em</option>
+                <option value="2">2 trẻ em</option>
+            </select>
+        </label>
+        <button class="button booking-search-button" type="submit">Tìm phòng</button>
+    </form>
+
+    <div class="booking-results-heading">
+        <div>
+            <p class="booking-eyebrow">PHÒNG PHÙ HỢP</p>
+            <h2 data-booking-result-title>Phòng đang sẵn sàng cho bạn</h2>
+        </div>
+        <span class="room-count">03 hạng phòng</span>
+    </div>
+
+    <div class="room-results" data-booking-results>
+        <article class="room-result-card">
+            <div class="room-visual deluxe-king"><span>01</span></div>
+            <div class="room-result-info">
+                <div class="room-title-row"><div><h3>Deluxe King</h3><p>01 giường King · Tối đa 2 khách</p></div><span class="room-tag">Bán chạy</span></div>
+                <p class="room-description">Không gian ấm cúng, cửa sổ lớn hướng thành phố và góc làm việc riêng.</p>
+                <ul class="room-features"><li>28 m²</li><li>Wi-Fi miễn phí</li><li>Bữa sáng</li><li>Điều hòa</li></ul>
+            </div>
+            <div class="room-price"><small>Chỉ từ / đêm</small><strong>1.450.000 ₫</strong><span>Đã gồm thuế, phí</span><button class="button" type="button" data-book-room data-room-name="Deluxe King" data-room-price="1.450.000 ₫">Chọn phòng</button></div>
+        </article>
+
+        <article class="room-result-card">
+            <div class="room-visual deluxe-twin"><span>02</span></div>
+            <div class="room-result-info">
+                <div class="room-title-row"><div><h3>Deluxe Twin</h3><p>02 giường đơn · Tối đa 2 khách</p></div></div>
+                <p class="room-description">Phù hợp cho bạn bè hoặc đồng nghiệp, thiết kế hiện đại và đầy đủ tiện nghi.</p>
+                <ul class="room-features"><li>30 m²</li><li>Wi-Fi miễn phí</li><li>Bữa sáng</li><li>Két an toàn</li></ul>
+            </div>
+            <div class="room-price"><small>Chỉ từ / đêm</small><strong>1.650.000 ₫</strong><span>Đã gồm thuế, phí</span><button class="button" type="button" data-book-room data-room-name="Deluxe Twin" data-room-price="1.650.000 ₫">Chọn phòng</button></div>
+        </article>
+
+        <article class="room-result-card">
+            <div class="room-visual executive-suite"><span>03</span></div>
+            <div class="room-result-info">
+                <div class="room-title-row"><div><h3>Executive Suite</h3><p>01 giường King · Tối đa 3 khách</p></div><span class="room-tag calm">Ưu đãi thành viên</span></div>
+                <p class="room-description">Phòng suite rộng rãi với khu tiếp khách riêng, phù hợp cho chuyến đi đặc biệt.</p>
+                <ul class="room-features"><li>52 m²</li><li>City view</li><li>Bồn tắm</li><li>Mini bar</li></ul>
+            </div>
+            <div class="room-price"><small>Chỉ từ / đêm</small><strong>2.800.000 ₫</strong><span>Đã gồm thuế, phí</span><button class="button" type="button" data-book-room data-room-name="Executive Suite" data-room-price="2.800.000 ₫">Chọn phòng</button></div>
+        </article>
+    </div>
+
+    <div class="booking-notice" data-booking-notice hidden role="status"></div>
+</section>
+
+<dialog class="booking-dialog" data-booking-dialog aria-labelledby="booking-dialog-title">
+    <div class="dialog-heading">
+        <div><p class="booking-eyebrow">YÊU CẦU ĐẶT PHÒNG</p><h2 id="booking-dialog-title">Hoàn tất thông tin</h2></div>
+        <button class="dialog-close" data-booking-close type="button" aria-label="Đóng">×</button>
+    </div>
+    <div class="booking-summary"><span>Hạng phòng đã chọn</span><strong data-selected-room>Deluxe King</strong><span data-selected-price>1.450.000 ₫ / đêm</span></div>
+    <form class="booking-contact-form" data-booking-form>
+        <label>Họ và tên<input type="text" name="guestName" placeholder="Nhập họ và tên" required /></label>
+        <label>Email<input type="email" name="email" placeholder="email@example.com" required /></label>
+        <label>Số điện thoại<input type="tel" name="phone" placeholder="0xxx xxx xxx" required /></label>
+        <label>Ghi chú cho khách sạn<textarea name="note" rows="3" placeholder="Yêu cầu đặc biệt (nếu có)"></textarea></label>
+        <p class="booking-demo-note">Đây là thao tác mô phỏng. Khi có API, thông tin sẽ được gửi để tạo đơn đặt phòng.</p>
+        <div class="dialog-actions"><button class="button secondary" data-booking-close type="button">Quay lại</button><button class="button" type="submit">Gửi yêu cầu đặt phòng</button></div>
+    </form>
+</dialog>
+
+@section Scripts {
+    <script src="~/js/booking-demo.js" asp-append-version="true"></script>
+}
