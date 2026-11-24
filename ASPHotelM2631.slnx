@@ -1,4 +1,9 @@
 <Solution>
+  <Folder Name="/tests/">
+    <Project Path="tests/ASPHotelM2631.Tests.Api/ASPHotelM2631.Tests.Api.csproj" />
+    <Project Path="tests/ASPHotelM2631.Tests.Ui/ASPHotelM2631.Tests.Ui.csproj" />
+    <Project Path="tests/ASPHotelM2631.Tests.Unit/ASPHotelM2631.Tests.Unit.csproj" />
+  </Folder>
   <Project Path="ASPHotelM2631.Application/ASPHotelM2631.Application.csproj" Id="66207a40-9471-499e-af9f-07ee5f0b182d" />
   <Project Path="ASPHotelM2631.Domain/ASPHotelM2631.Domain.csproj" Id="014984fb-6120-43fd-a611-b1762d4ee949" />
   <Project Path="ASPHotelM2631.Infrastructure/ASPHotelM2631.Infrastructure.csproj" Id="9f58a1de-e018-491c-bf64-066f7a1264d9" />

@@ -1,0 +1,4 @@
+tc_id,observer,date,note
+# Mỗi dòng = một người đã TRỰC TIẾP XEM Chrome chạy test (chế độ có cửa sổ, UI_PACE_MS>0) và đối chiếu ảnh trong TestResults/evidence/<TC-ID>/.
+# Ví dụ:
+# TC-UI-HOME-001,Nguyen Van A,2026-11-21,Đã xem: trang Welcome hiển thị, ổ khóa HTTPS hợp lệ

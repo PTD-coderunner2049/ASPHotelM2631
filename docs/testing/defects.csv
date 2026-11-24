@@ -1,0 +1,2 @@
+tc_id,defect_id,severity,status,summary
+TC-API-REG-008,DEF-002,High,Suspected,"Role 'KhachHang' chua duoc seed (Program.cs: dong IdentitySeeder dang comment, class khong co trong repo; migration khong seed role; canh bao CS1998 o Main vi khong co await) -> AddToRoleAsync nem loi -> 500 va de lai user mo coi (dang ky lai bi 409)."
