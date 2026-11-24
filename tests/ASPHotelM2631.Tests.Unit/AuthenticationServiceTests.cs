@@ -12,10 +12,19 @@ namespace ASPHotelM2631.Tests.Unit;
 /// </summary>
 public class AuthenticationServiceTests
 {
+    private sealed class FakeEmailVerification : IEmailVerification
+    {
+        public Task<AuthenticationStatus> SendCodeAsync(string identifier) =>
+            Task.FromResult(AuthenticationStatus.Succeeded);
+
+        public Task<AuthenticationStatus> ConfirmAsync(string identifier, string code) =>
+            Task.FromResult(AuthenticationStatus.Succeeded);
+    }
+
     private static (AuthenticationService svc, FakeAccountStore store) Make()
     {
         var store = new FakeAccountStore();
-        return (new AuthenticationService(store), store);
+        return (new AuthenticationService(store, new FakeEmailVerification()), store);
     }
 
     // ---------- Register ----------
