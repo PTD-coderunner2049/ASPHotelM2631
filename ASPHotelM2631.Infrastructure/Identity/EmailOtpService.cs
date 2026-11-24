@@ -34,9 +34,16 @@ public sealed class EmailOtpService(
             return AuthenticationStatus.TooManyRequests; // chặn spam mail
 
         // Mã cũ chưa dùng bị vô hiệu
-        await db.EmailOtps
-            .Where(o => o.UserId == user.Id && o.UsedAt == null) 
-            .ExecuteUpdateAsync(s => s.SetProperty(o => o.UsedAt, now)); 
+        var unusedCodes = db.EmailOtps.Where(o => o.UserId == user.Id && o.UsedAt == null);
+        if (db.Database.IsRelational())
+        {
+            await unusedCodes.ExecuteUpdateAsync(s => s.SetProperty(o => o.UsedAt, now));
+        }
+        else
+        {
+            foreach (var oldCode in await unusedCodes.ToListAsync()) oldCode.UsedAt = now;
+            await db.SaveChangesAsync();
+        }
 
         var code = RandomNumberGenerator.GetInt32(0, 1_000_000).ToString("D6");   // 000000 đến 999999
         db.EmailOtps.Add(new EmailOtp
@@ -72,8 +79,16 @@ public sealed class EmailOtpService(
         if (!CryptographicOperations.FixedTimeEquals(expected, actual))
         {
             // Tăng bộ đếm trong một câu UPDATE để nhiều request cùng lúc không đoán lách được
-            await db.EmailOtps.Where(o => o.Id == otp.Id)
-                .ExecuteUpdateAsync(s => s.SetProperty(o => o.FailedAttempts, o => o.FailedAttempts + 1));
+            if (db.Database.IsRelational())
+            {
+                await db.EmailOtps.Where(o => o.Id == otp.Id)
+                    .ExecuteUpdateAsync(s => s.SetProperty(o => o.FailedAttempts, o => o.FailedAttempts + 1));
+            }
+            else
+            {
+                otp.FailedAttempts++;
+                await db.SaveChangesAsync();
+            }
             return AuthenticationStatus.InvalidCode;
         }
 

@@ -35,6 +35,13 @@ public static class ApiHelpers
     public static Task<HttpResponseMessage> Login(this HttpClient c, string id, string pw) =>
         c.PostAsJsonAsync("/api/sessions", new { identifier = id, password = pw });
 
+    public static async Task ConfirmEmail(this HttpClient c, string email)
+    {
+        Assert.True(CapturingEmailSender.TryTakeCode(email, out var code), "No email verification code was captured.");
+        var response = await c.PostAsJsonAsync("/api/email-verifications/confirm", new { identifier = email, code });
+        Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+    }
+
     public static async Task<JsonElement> Json(this HttpResponseMessage r)
     {
         var text = await r.Content.ReadAsStringAsync();
@@ -61,6 +68,7 @@ public static class ApiHelpers
         var email = NewEmail();
         var reg = await c.Register("Tester", email, Password);
         Assert.Equal(System.Net.HttpStatusCode.Created, reg.StatusCode);
+        await c.ConfirmEmail(email);
         var login = await c.Login(email, Password);
         Assert.Equal(System.Net.HttpStatusCode.Created, login.StatusCode);
         return (email, (await login.Json()).GetProperty("token").GetString()!);

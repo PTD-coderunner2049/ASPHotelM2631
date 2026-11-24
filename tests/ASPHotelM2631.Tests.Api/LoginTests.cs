@@ -15,6 +15,7 @@ public class LoginTests : IDisposable
     {
         var email = ApiHelpers.NewEmail();
         Assert.Equal(HttpStatusCode.Created, (await _c.Register("Nguyen Van A", email, ApiHelpers.Password)).StatusCode);
+        await _c.ConfirmEmail(email);
         return email;
     }
 
