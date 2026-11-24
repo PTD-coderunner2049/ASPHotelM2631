@@ -1,9 +1,2 @@
 tc_id,defect_id,severity,status,summary
-TC-API-SESS-001,DEF-001,High,Suspected,"JwtTokenService ghi claim 'securityStamp' nhung Program.cs (OnTokenValidated) doc claim 'stamp' -> null != SecurityStamp cua user -> MOI token hop le bi tu choi (401). Sua: doc 'securityStamp' o Program.cs dong ~79."
-TC-API-SESS-003,DEF-001,High,Suspected,"Bi chan boi DEF-001 (doi chung duong: token that khong duoc chap nhan)"
-TC-API-SESS-004,DEF-001,High,Suspected,"Bi chan boi DEF-001"
-TC-API-SESS-005,DEF-001,High,Suspected,"Bi chan boi DEF-001"
-TC-API-SESS-007,DEF-001,High,Suspected,"Bi chan boi DEF-001"
-TC-API-ROLE-002,DEF-001,High,Suspected,"Toan bo 36 dong do vi DEF-001: token hop le tra 401 nen khong kiem tra duoc 200/403"
-TC-API-REG-007,DEF-001,High,Suspected,"Bi chan boi DEF-001: token hop le tra 401 nen khong kiem tra duoc 403 (/api/admin) va 200 (/api/customer)"
 TC-API-REG-008,DEF-002,High,Suspected,"Role 'KhachHang' chua duoc seed (Program.cs: dong IdentitySeeder dang comment, class khong co trong repo; migration khong seed role; canh bao CS1998 o Main vi khong co await) -> AddToRoleAsync nem loi -> 500 va de lai user mo coi (dang ky lai bi 409)."

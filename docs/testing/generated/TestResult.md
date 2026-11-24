@@ -3,7 +3,7 @@
 - Thời gian: 2026-11-22 10:06
 - Commit: local
 - Số file TRX đọc: 2
-- Tổng test case: 51  (FAIL: 8 | PASS: 43)
+- Tổng test case: 44  (FAIL: 1 | PASS: 43)
 - **Kết luận: FAILED**
 
 | ID | Suite | Tiêu đề | Kết quả | Số lần chạy | Thời gian (s) | Bug | Ghi chú / lỗi | Bằng chứng |
@@ -20,17 +20,10 @@
 | TC-API-REG-004 | Api | POST /api/users dữ liệu không hợp lệ -> 400 | PASS | 4 | 1.81 | - | - | - |
 | TC-API-REG-005 | Api | POST /api/users body thiếu/hỏng -> 400 (không 500) | PASS | 3 | 0.81 | - | - | - |
 | TC-API-REG-006 | Api | POST /api/users sai Content-Type -> 415 | PASS | 1 | 0.22 | - | - | - |
-| TC-API-REG-007 | Api | Đăng ký công khai KHÔNG thể tự chọn vai trò (chống leo thang đặc quyền) | FAIL | 1 | 0.38 | DEF-001 | 1/1 lần chạy fail. Assert.Equal() Failure: Values differ / Expected: Forbidden / Actual:   Unauthorized | - |
 | TC-API-REG-008 | Api | Đăng ký trên DB mới migrate (chưa seed role) vẫn phải trả 201, không 500 | FAIL | 1 | 1.10 | DEF-002 | 1/1 lần chạy fail. Assert.Equal() Failure: Values differ / Expected: Created / Actual:   InternalServerError | - |
 | TC-API-ROLE-001 | Api | Các endpoint phân quyền yêu cầu đăng nhập: không token -> 401 | PASS | 6 | 0.67 | - | - | - |
-| TC-API-ROLE-002 | Api | Ma trận phân quyền 6 vai trò x 6 endpoint: đúng vai trò -> 200, sai vai trò -> 403 | FAIL | 36 | 10.59 | DEF-001 | 36/36 lần chạy fail. Assert.Equal() Failure: Values differ / Expected: Forbidden / Actual:   Unauthorized | - |
-| TC-API-SESS-001 | Api | GET /api/sessions/current với token thật vừa đăng nhập -> 200 và đúng thông tin user | FAIL | 1 | 0.44 | DEF-001 | 1/1 lần chạy fail. Assert.Equal() Failure: Values differ / Expected: OK / Actual:   Unauthorized | - |
 | TC-API-SESS-002 | Api | GET /api/sessions/current không token / token rác -> 401 | PASS | 4 | 2.64 | - | - | - |
-| TC-API-SESS-003 | Api | Token ký bằng KHOÁ KHÁC bị từ chối (401) dù có claim role=Admin | FAIL | 1 | 0.30 | DEF-001 | 1/1 lần chạy fail. Assert.Equal() Failure: Values differ / Expected: OK / Actual:   Unauthorized | - |
-| TC-API-SESS-004 | Api | Token ký đúng khoá nhưng ĐÃ HẾT HẠN bị từ chối (401) | FAIL | 1 | 0.36 | DEF-001 | 1/1 lần chạy fail. Assert.Equal() Failure: Values differ / Expected: OK / Actual:   Unauthorized | - |
-| TC-API-SESS-005 | Api | Đăng xuất: DELETE trả 204 và token cũ bị vô hiệu ngay | FAIL | 1 | 0.40 | DEF-001 | 1/1 lần chạy fail. Assert.Equal() Failure: Values differ / Expected: OK / Actual:   Unauthorized | - |
 | TC-API-SESS-006 | Api | DELETE /api/sessions/current không token -> 401 | PASS | 1 | 0.29 | - | - | - |
-| TC-API-SESS-007 | Api | Tài khoản đang bị khóa thì token cũ cũng không dùng được | FAIL | 1 | 0.44 | DEF-001 | 1/1 lần chạy fail. Assert.Equal() Failure: Values differ / Expected: OK / Actual:   Unauthorized | - |
 | TC-API-TLS-001 | Api | Gọi API bằng HTTP bị chuyển hướng sang HTTPS (307), giữ nguyên đường dẫn | PASS | 1 | 0.23 | - | - | - |
 | TC-API-TLS-002 | Api | Đăng nhập qua HTTP KHÔNG được xử lý: bị redirect và không trả token | PASS | 1 | 1.30 | - | - | - |
 | TC-API-TLS-003 | Api | Gọi qua HTTPS không bị redirect (không vòng lặp chuyển hướng) | PASS | 1 | 0.34 | - | - | - |

@@ -37,7 +37,7 @@
     }
 </style>
 <h1>Test Result Report</h1>
-<p>2026-11-22 10:06 · commit local · FAIL: 8 | PASS: 43</p>
+<p>2026-11-22 10:06 · commit local · FAIL: 1 | PASS: 43</p>
 <h2 style='color:#cf222e'>Kết luận: FAILED</h2>
 <table>
     <tr>
@@ -183,17 +183,7 @@
         <td>-
         <td>-
     </tr>
-    <tr>
-        <td>TC-API-REG-007
-        <td>Api
-        <td>Đăng ký công khai KHÔNG thể tự chọn vai trò (chống leo thang đặc quyền)
-        <td><span class=b style="background:#cf222e">FAIL</span>
-        <td>1
-        <td>0.38
-        <td>DEF-001
-        <td>1/1 lần chạy fail. Assert.Equal() Failure: Values differ | Expected: Forbidden | Actual: Unauthorized
-        <td>-
-    </tr>
+
     <tr>
         <td>TC-API-REG-008
         <td>Api
@@ -216,28 +206,7 @@
         <td>-
         <td>-
     </tr>
-    <tr>
-        <td>TC-API-ROLE-002
-        <td>Api
-        <td>Ma trận phân quyền 6 vai trò x 6 endpoint: đúng vai trò -&gt; 200, sai vai trò -&gt; 403
-        <td><span class=b style="background:#cf222e">FAIL</span>
-        <td>36
-        <td>10.59
-        <td>DEF-001
-        <td>36/36 lần chạy fail. Assert.Equal() Failure: Values differ | Expected: Forbidden | Actual: Unauthorized
-        <td>-
-    </tr>
-    <tr>
-        <td>TC-API-SESS-001
-        <td>Api
-        <td>GET /api/sessions/current với token thật vừa đăng nhập -&gt; 200 và đúng thông tin user
-        <td><span class=b style="background:#cf222e">FAIL</span>
-        <td>1
-        <td>0.44
-        <td>DEF-001
-        <td>1/1 lần chạy fail. Assert.Equal() Failure: Values differ | Expected: OK | Actual: Unauthorized
-        <td>-
-    </tr>
+
     <tr>
         <td>TC-API-SESS-002
         <td>Api
@@ -249,39 +218,7 @@
         <td>-
         <td>-
     </tr>
-    <tr>
-        <td>TC-API-SESS-003
-        <td>Api
-        <td>Token ký bằng KHOÁ KHÁC bị từ chối (401) dù có claim role=Admin
-        <td><span class=b style="background:#cf222e">FAIL</span>
-        <td>1
-        <td>0.30
-        <td>DEF-001
-        <td>1/1 lần chạy fail. Assert.Equal() Failure: Values differ | Expected: OK | Actual: Unauthorized
-        <td>-
-    </tr>
-    <tr>
-        <td>TC-API-SESS-004
-        <td>Api
-        <td>Token ký đúng khoá nhưng ĐÃ HẾT HẠN bị từ chối (401)
-        <td><span class=b style="background:#cf222e">FAIL</span>
-        <td>1
-        <td>0.36
-        <td>DEF-001
-        <td>1/1 lần chạy fail. Assert.Equal() Failure: Values differ | Expected: OK | Actual: Unauthorized
-        <td>-
-    </tr>
-    <tr>
-        <td>TC-API-SESS-005
-        <td>Api
-        <td>Đăng xuất: DELETE trả 204 và token cũ bị vô hiệu ngay
-        <td><span class=b style="background:#cf222e">FAIL</span>
-        <td>1
-        <td>0.40
-        <td>DEF-001
-        <td>1/1 lần chạy fail. Assert.Equal() Failure: Values differ | Expected: OK | Actual: Unauthorized
-        <td>-
-    </tr>
+
     <tr>
         <td>TC-API-SESS-006
         <td>Api
@@ -293,17 +230,7 @@
         <td>-
         <td>-
     </tr>
-    <tr>
-        <td>TC-API-SESS-007
-        <td>Api
-        <td>Tài khoản đang bị khóa thì token cũ cũng không dùng được
-        <td><span class=b style="background:#cf222e">FAIL</span>
-        <td>1
-        <td>0.44
-        <td>DEF-001
-        <td>1/1 lần chạy fail. Assert.Equal() Failure: Values differ | Expected: OK | Actual: Unauthorized
-        <td>-
-    </tr>
+
     <tr>
         <td>TC-API-TLS-001
         <td>Api

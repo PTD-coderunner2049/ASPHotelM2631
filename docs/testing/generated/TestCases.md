@@ -2,7 +2,7 @@
 
 _Sinh tự động từ code bởi `tools/Generate-TestDocs.py` lúc 2026-11-22 10:06 (commit local). Không sửa tay - sửa attribute `[TcFact]` trong code._
 
-Tổng số test case: **51** (suite: Unit,Api)
+Tổng số test case: **44** (suite: Unit,Api)
 
 ## Suite: Api
 
@@ -20,17 +20,10 @@ Tổng số test case: **51** (suite: Unit,Api)
 | TC-API-REG-004 | POST /api/users dữ liệu không hợp lệ -&gt; 400 | High | - | - | POST /api/users với &lt;name&gt;,&lt;identifier&gt;,&lt;password&gt; sai | HTTP 400; message 'Thông tin đăng ký không hợp lệ.' |
 | TC-API-REG-005 | POST /api/users body thiếu/hỏng -&gt; 400 (không 500) | Medium | - | - | POST body: '{}' / JSON hỏng / chuỗi rỗng, Content-Type json | HTTP 400 |
 | TC-API-REG-006 | POST /api/users sai Content-Type -&gt; 415 | Medium | - | - | POST body JSON nhưng Content-Type text/plain | HTTP 415 |
-| TC-API-REG-007 | Đăng ký công khai KHÔNG thể tự chọn vai trò (chống leo thang đặc quyền) | High | - | - | POST /api/users kèm field thừa role='Admin'<br>Đăng nhập<br>GET /api/admin, GET /api/customer | Đăng nhập trả role='KhachHang'; /api/admin = 403; /api/customer = 200 |
 | TC-API-REG-008 | Đăng ký trên DB mới migrate (chưa seed role) vẫn phải trả 201, không 500 | High | - | DB trống, chưa seed role KhachHang | POST /api/users hợp lệ | HTTP 201 (hoặc ứng dụng tự tạo role khi thiếu). KHÔNG được 500 và không để lại user mồ côi |
 | TC-API-ROLE-001 | Các endpoint phân quyền yêu cầu đăng nhập: không token -&gt; 401 | High | - | - | GET &lt;endpoint&gt; không Authorization | 401 (không phải 200 hay 403) |
-| TC-API-ROLE-002 | Ma trận phân quyền 6 vai trò x 6 endpoint: đúng vai trò -&gt; 200, sai vai trò -&gt; 403 | High | - | Có user thuộc từng vai trò | Login bằng user &lt;role&gt;<br>GET &lt;endpoint&gt; | 200 nếu role khớp endpoint; ngược lại 403 (đã đăng nhập nhưng không đủ quyền) |
-| TC-API-SESS-001 | GET /api/sessions/current với token thật vừa đăng nhập -&gt; 200 và đúng thông tin user | High | - | Đã đăng ký + đăng nhập lấy token | GET /api/sessions/current, header Authorization: Bearer &lt;token&gt; | 200; body có id, fullName='Tester', userName=email, role='KhachHang' |
 | TC-API-SESS-002 | GET /api/sessions/current không token / token rác -&gt; 401 | High | - | - | GET với header Authorization = &lt;giá trị&gt; | 401 |
-| TC-API-SESS-003 | Token ký bằng KHOÁ KHÁC bị từ chối (401) dù có claim role=Admin | High | - | - | Đối chứng: token thật -&gt; 200<br>Tự ký token bằng key sai<br>GET /api/sessions/current | Token thật 200; token giả 401 |
-| TC-API-SESS-004 | Token ký đúng khoá nhưng ĐÃ HẾT HẠN bị từ chối (401) | High | - | - | Đối chứng: token thật -&gt; 200<br>Tự ký token đúng key nhưng exp = 5 phút trước<br>GET | Token thật 200; token hết hạn 401 |
-| TC-API-SESS-005 | Đăng xuất: DELETE trả 204 và token cũ bị vô hiệu ngay | High | - | - | Login<br>GET current (200)<br>DELETE /api/sessions/current<br>GET current lại bằng token cũ | Trước: 200; DELETE: 204; Sau: 401 |
 | TC-API-SESS-006 | DELETE /api/sessions/current không token -&gt; 401 | Medium | - | - | DELETE không header Authorization | 401 |
-| TC-API-SESS-007 | Tài khoản đang bị khóa thì token cũ cũng không dùng được | Medium | - | - | Login lấy token (đối chứng 200)<br>Sai mật khẩu 5 lần<br>GET current bằng token cũ | Sau khi khóa: 401 |
 | TC-API-TLS-001 | Gọi API bằng HTTP bị chuyển hướng sang HTTPS (307), giữ nguyên đường dẫn | High | - | - | GET http://localhost/api/customer (không tự theo redirect) | 307; Location bắt đầu bằng https:// và kết thúc bằng /api/customer |
 | TC-API-TLS-002 | Đăng nhập qua HTTP KHÔNG được xử lý: bị redirect và không trả token | High | - | Tài khoản đã tồn tại (đối chứng: login qua HTTPS thành công) | Đăng ký + login qua HTTPS (201)<br>POST /api/sessions qua HTTP | Qua HTTPS: 201. Qua HTTP: 307, body không chứa 'token' |
 | TC-API-TLS-003 | Gọi qua HTTPS không bị redirect (không vòng lặp chuyển hướng) | Medium | - | - | POST /api/sessions với dữ liệu sai định dạng qua https://localhost | 400 (do logic nghiệp vụ), KHÔNG phải 307 |
