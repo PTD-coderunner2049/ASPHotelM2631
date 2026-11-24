@@ -1,7 +1,22 @@
 namespace ASPHotelM2631.Application.Authentication;
 
-public sealed class AuthenticationService(IAccountStore store) : IAuthenticationService
-{
+public sealed class AuthenticationService(IAccountStore store, IEmailVerification verification) : IAuthenticationService{
+     public Task<AuthenticationStatus> SendVerificationCodeAsync(string identifier)
+    {
+        var id = IdentifierRules.Normalize(identifier);
+        return id.Contains('@') && IdentifierRules.IsValid(id)
+            ? verification.SendCodeAsync(id)
+            : Task.FromResult(AuthenticationStatus.Succeeded);   // im lặng, không tiết lộ gì
+    }
+
+    public Task<AuthenticationStatus> ConfirmEmailAsync(string identifier, string code)
+    {
+        var id = IdentifierRules.Normalize(identifier);
+        if (!id.Contains('@') || !IdentifierRules.IsValid(id) || code is null || code.Trim().Length != 6)
+            return Task.FromResult(AuthenticationStatus.InvalidCode);
+
+        return verification.ConfirmAsync(id, code.Trim());
+    }
     public Task<AuthenticationStatus> RegisterAsync(string fullName, string identifier, string password)
     {
         var name = (fullName ?? "").Trim();

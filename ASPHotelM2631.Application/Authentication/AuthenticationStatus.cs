@@ -2,7 +2,8 @@ namespace ASPHotelM2631.Application.Authentication;
 
 public enum AuthenticationStatus
 {
-    Succeeded, InvalidInput, DuplicateAccount, InvalidCredentials, LockedOut
+    Succeeded, InvalidInput, DuplicateAccount, InvalidCredentials, LockedOut,
+    EmailNotConfirmed, TooManyRequests, InvalidCode
 }
 
 /// <summary>Kết quả đăng nhập kèm vai trò để API trả về giao diện.</summary>

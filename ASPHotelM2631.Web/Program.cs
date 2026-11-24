@@ -87,7 +87,15 @@ namespace ASPHotelM2631.Web
             builder.Services.AddAuthorization();
             builder.Services.AddSingleton<ITokenService, JwtTokenService>();
             builder.Services.AddHttpContextAccessor();
+
             builder.Services.AddScoped<IAccountStore, IdentityAccountStore>();
+            // Chưa cấu hình Smtp:Host thì dùng chế độ thử (in mã ra terminal)
+            if (string.IsNullOrWhiteSpace(builder.Configuration["Smtp:Host"]))
+                builder.Services.AddSingleton<IEmailSender, LogEmailSender>();
+            else
+                builder.Services.AddSingleton<IEmailSender, SmtpEmailSender>();
+
+            builder.Services.AddScoped<IEmailVerification, EmailOtpService>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddControllersWithViews();
 
@@ -113,7 +121,14 @@ namespace ASPHotelM2631.Web
                 pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
 
-            //await IdentitySeeder.SeedAsync(app.Services, includeTestUsers: app.Environment.IsDevelopment());
+            if (app.Environment.IsDevelopment())
+            {
+                await using var scope = app.Services.CreateAsyncScope();
+                var services = scope.ServiceProvider;
+
+                await services.GetRequiredService<AppDbContext>().Database.MigrateAsync();
+                await IdentitySeeder.SeedAsync(services, includeTestUsers: true);
+            }
 
             app.Run();
         }
