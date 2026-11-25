@@ -1,8 +1,9 @@
 using ASPHotelM2631.Domain.Constants;
+using ASPHotelM2631.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ASPHotelM2631.Infrastructure.Identity;
+namespace ASPHotelM2631.Infrastructure.Identity.Accounts;
 
 public static class IdentitySeeder
 {
