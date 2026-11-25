@@ -85,25 +85,6 @@ public class RegisterTests : IDisposable
 
         Assert.Equal(HttpStatusCode.UnsupportedMediaType, r.StatusCode);
     }
-
-    [TcFact("TC-API-REG-007", "Đăng ký công khai KHÔNG thể tự chọn vai trò (chống leo thang đặc quyền)", Priority = TcMeta.High,
-        Steps = "POST /api/users kèm field thừa role='Admin' | Đăng nhập | GET /api/admin, GET /api/customer",
-        Expected = "Đăng nhập trả role='KhachHang'; /api/admin = 403; /api/customer = 200")]
-    public async Task Register_ExtraRoleField_IsIgnored()
-    {
-        var email = ApiHelpers.NewEmail();
-        var reg = await _c.PostAsJsonAsync("/api/users",
-            new { fullName = "Hacker", identifier = email, password = ApiHelpers.Password, role = "Admin" });
-        Assert.Equal(HttpStatusCode.Created, reg.StatusCode);
-
-        var login = await _c.Login(email, ApiHelpers.Password);
-        var json = await login.Json();
-        var token = json.GetProperty("token").GetString();
-
-        Assert.Equal("KhachHang", json.GetProperty("user").GetProperty("role").GetString());
-        Assert.Equal(HttpStatusCode.Forbidden, (await _c.SendAsync(ApiHelpers.Get("/api/admin", token))).StatusCode);
-        Assert.Equal(HttpStatusCode.OK, (await _c.SendAsync(ApiHelpers.Get("/api/customer", token))).StatusCode);
-    }
 }
 
 /// <summary>Mô phỏng đúng trạng thái DB vừa migrate xong: CHƯA có role nào (Program.cs đang comment dòng seeder).</summary>

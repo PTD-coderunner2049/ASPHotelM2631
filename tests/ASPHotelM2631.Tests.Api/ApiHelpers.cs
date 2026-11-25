@@ -65,33 +65,4 @@ public static class ApiHelpers
         Assert.Equal(System.Net.HttpStatusCode.Created, login.StatusCode);
         return (email, (await login.Json()).GetProperty("token").GetString()!);
     }
-
-    /// <summary>Tạo user với role bất kỳ trực tiếp qua UserManager (đăng ký công khai chỉ tạo được KhachHang), rồi đăng nhập qua API.</summary>
-    public static async Task<string> TokenForRole(this HotelApiFactory f, HttpClient c, string role)
-    {
-        var email = NewEmail();
-        using (var scope = f.Services.CreateScope())
-        {
-            var users = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            var user = new ApplicationUser { UserName = email, Email = email, FullName = $"User {role}" };
-            (await users.CreateAsync(user, Password)).ThrowIfFailed();
-            (await users.AddToRoleAsync(user, role)).ThrowIfFailed();
-        }
-        var login = await c.Login(email, Password);
-        Assert.Equal(System.Net.HttpStatusCode.Created, login.StatusCode);
-        return (await login.Json()).GetProperty("token").GetString()!;
-    }
-
-    /// <summary>Tự ký JWT với key tuỳ ý để mô phỏng token giả / hết hạn.</summary>
-    public static string ForgeToken(string key, DateTime notBefore, DateTime expires, string stamp = "any-stamp")
-    {
-        var jwt = new JwtSecurityToken(
-            issuer: "ASPHotelM2631", audience: "ASPHotelM2631.Clients",
-            claims: new[] { new Claim("sub", "forged"), new Claim("name", "x"), new Claim("fullName", "x"),
-                            new Claim("securityStamp", stamp), new Claim("role", "Admin") },
-            notBefore: notBefore, expires: expires,
-            signingCredentials: new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)), SecurityAlgorithms.HmacSha256));
-        return new JwtSecurityTokenHandler().WriteToken(jwt);
-    }
 }

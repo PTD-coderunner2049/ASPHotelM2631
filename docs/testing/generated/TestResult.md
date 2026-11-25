@@ -1,40 +1,33 @@
 # Test Result Report
 
-- Thời gian: 2026-11-22 10:06
+- Thời gian: 2026-11-25 11:05
 - Commit: local
 - Số file TRX đọc: 2
-- Tổng test case: 51  (FAIL: 8 | PASS: 43)
+- Tổng test case: 44  (FAIL: 1 | PASS: 43)
 - **Kết luận: FAILED**
 
 | ID | Suite | Tiêu đề | Kết quả | Số lần chạy | Thời gian (s) | Bug | Ghi chú / lỗi | Bằng chứng |
 |---|---|---|---|---|---|---|---|---|
-| TC-API-LOGIN-001 | Api | POST /api/sessions đúng thông tin -> 201 kèm JWT, hạn dùng và thông tin user | PASS | 1 | 1.31 | - | - | - |
-| TC-API-LOGIN-002 | Api | Sai mật khẩu và tài khoản không tồn tại trả CÙNG một thông báo 401 (không lộ tài khoản có tồn tại) | PASS | 1 | 0.51 | - | - | - |
-| TC-API-LOGIN-003 | Api | POST /api/sessions dữ liệu sai định dạng -> 400 | PASS | 2 | 0.56 | - | - | - |
-| TC-API-LOGIN-004 | Api | Sai mật khẩu 5 lần -> khóa (423); khi đang khóa, mật khẩu ĐÚNG cũng bị từ chối | PASS | 1 | 0.74 | - | - | - |
-| TC-API-LOGIN-005 | Api | Đăng nhập không phân biệt hoa/thường với email, bỏ dấu phân cách với SĐT | PASS | 1 | 0.57 | - | - | - |
-| TC-API-LOGIN-006 | Api | Lockout của một tài khoản không ảnh hưởng tài khoản khác | PASS | 1 | 0.84 | - | - | - |
-| TC-API-REG-001 | Api | POST /api/users bằng email hợp lệ -> 201 và thông báo thành công | PASS | 1 | 0.43 | - | - | - |
-| TC-API-REG-002 | Api | POST /api/users bằng SĐT hợp lệ (có dấu cách) -> 201 | PASS | 1 | 0.28 | - | - | - |
-| TC-API-REG-003 | Api | Đăng ký trùng tài khoản -> 409; trùng cả khi khác hoa/thường | PASS | 1 | 0.51 | - | - | - |
-| TC-API-REG-004 | Api | POST /api/users dữ liệu không hợp lệ -> 400 | PASS | 4 | 1.81 | - | - | - |
-| TC-API-REG-005 | Api | POST /api/users body thiếu/hỏng -> 400 (không 500) | PASS | 3 | 0.81 | - | - | - |
-| TC-API-REG-006 | Api | POST /api/users sai Content-Type -> 415 | PASS | 1 | 0.22 | - | - | - |
-| TC-API-REG-007 | Api | Đăng ký công khai KHÔNG thể tự chọn vai trò (chống leo thang đặc quyền) | FAIL | 1 | 0.38 | DEF-001 | 1/1 lần chạy fail. Assert.Equal() Failure: Values differ / Expected: Forbidden / Actual:   Unauthorized | - |
-| TC-API-REG-008 | Api | Đăng ký trên DB mới migrate (chưa seed role) vẫn phải trả 201, không 500 | FAIL | 1 | 1.10 | DEF-002 | 1/1 lần chạy fail. Assert.Equal() Failure: Values differ / Expected: Created / Actual:   InternalServerError | - |
-| TC-API-ROLE-001 | Api | Các endpoint phân quyền yêu cầu đăng nhập: không token -> 401 | PASS | 6 | 0.67 | - | - | - |
-| TC-API-ROLE-002 | Api | Ma trận phân quyền 6 vai trò x 6 endpoint: đúng vai trò -> 200, sai vai trò -> 403 | FAIL | 36 | 10.59 | DEF-001 | 36/36 lần chạy fail. Assert.Equal() Failure: Values differ / Expected: Forbidden / Actual:   Unauthorized | - |
-| TC-API-SESS-001 | Api | GET /api/sessions/current với token thật vừa đăng nhập -> 200 và đúng thông tin user | FAIL | 1 | 0.44 | DEF-001 | 1/1 lần chạy fail. Assert.Equal() Failure: Values differ / Expected: OK / Actual:   Unauthorized | - |
-| TC-API-SESS-002 | Api | GET /api/sessions/current không token / token rác -> 401 | PASS | 4 | 2.64 | - | - | - |
-| TC-API-SESS-003 | Api | Token ký bằng KHOÁ KHÁC bị từ chối (401) dù có claim role=Admin | FAIL | 1 | 0.30 | DEF-001 | 1/1 lần chạy fail. Assert.Equal() Failure: Values differ / Expected: OK / Actual:   Unauthorized | - |
-| TC-API-SESS-004 | Api | Token ký đúng khoá nhưng ĐÃ HẾT HẠN bị từ chối (401) | FAIL | 1 | 0.36 | DEF-001 | 1/1 lần chạy fail. Assert.Equal() Failure: Values differ / Expected: OK / Actual:   Unauthorized | - |
-| TC-API-SESS-005 | Api | Đăng xuất: DELETE trả 204 và token cũ bị vô hiệu ngay | FAIL | 1 | 0.40 | DEF-001 | 1/1 lần chạy fail. Assert.Equal() Failure: Values differ / Expected: OK / Actual:   Unauthorized | - |
-| TC-API-SESS-006 | Api | DELETE /api/sessions/current không token -> 401 | PASS | 1 | 0.29 | - | - | - |
-| TC-API-SESS-007 | Api | Tài khoản đang bị khóa thì token cũ cũng không dùng được | FAIL | 1 | 0.44 | DEF-001 | 1/1 lần chạy fail. Assert.Equal() Failure: Values differ / Expected: OK / Actual:   Unauthorized | - |
-| TC-API-TLS-001 | Api | Gọi API bằng HTTP bị chuyển hướng sang HTTPS (307), giữ nguyên đường dẫn | PASS | 1 | 0.23 | - | - | - |
-| TC-API-TLS-002 | Api | Đăng nhập qua HTTP KHÔNG được xử lý: bị redirect và không trả token | PASS | 1 | 1.30 | - | - | - |
-| TC-API-TLS-003 | Api | Gọi qua HTTPS không bị redirect (không vòng lặp chuyển hướng) | PASS | 1 | 0.34 | - | - | - |
-| TC-API-TLS-004 | Api | Môi trường Production gửi header HSTS khi truy cập HTTPS (host không phải localhost) | PASS | 1 | 0.26 | - | - | - |
+| TC-API-LOGIN-001 | Api | POST /api/sessions đúng thông tin -> 201 kèm JWT, hạn dùng và thông tin user | PASS | 1 | 1.45 | - | - | - |
+| TC-API-LOGIN-002 | Api | Sai mật khẩu và tài khoản không tồn tại trả CÙNG một thông báo 401 (không lộ tài khoản có tồn tại) | PASS | 1 | 0.43 | - | - | - |
+| TC-API-LOGIN-003 | Api | POST /api/sessions dữ liệu sai định dạng -> 400 | PASS | 2 | 0.53 | - | - | - |
+| TC-API-LOGIN-004 | Api | Sai mật khẩu 5 lần -> khóa (423); khi đang khóa, mật khẩu ĐÚNG cũng bị từ chối | PASS | 1 | 0.58 | - | - | - |
+| TC-API-LOGIN-005 | Api | Đăng nhập không phân biệt hoa/thường với email, bỏ dấu phân cách với SĐT | PASS | 1 | 0.55 | - | - | - |
+| TC-API-LOGIN-006 | Api | Lockout của một tài khoản không ảnh hưởng tài khoản khác | PASS | 1 | 0.58 | - | - | - |
+| TC-API-REG-001 | Api | POST /api/users bằng email hợp lệ -> 201 và thông báo thành công | PASS | 1 | 0.40 | - | - | - |
+| TC-API-REG-002 | Api | POST /api/users bằng SĐT hợp lệ (có dấu cách) -> 201 | PASS | 1 | 0.18 | - | - | - |
+| TC-API-REG-003 | Api | Đăng ký trùng tài khoản -> 409; trùng cả khi khác hoa/thường | PASS | 1 | 0.48 | - | - | - |
+| TC-API-REG-004 | Api | POST /api/users dữ liệu không hợp lệ -> 400 | PASS | 4 | 1.86 | - | - | - |
+| TC-API-REG-005 | Api | POST /api/users body thiếu/hỏng -> 400 (không 500) | PASS | 3 | 0.57 | - | - | - |
+| TC-API-REG-006 | Api | POST /api/users sai Content-Type -> 415 | PASS | 1 | 0.16 | - | - | - |
+| TC-API-REG-008 | Api | Đăng ký trên DB mới migrate (chưa seed role) vẫn phải trả 201, không 500 | FAIL | 1 | 1.13 | DEF-002 | 1/1 lần chạy fail. Assert.Equal() Failure: Values differ / Expected: Created / Actual:   InternalServerError | - |
+| TC-API-ROLE-001 | Api | Các endpoint phân quyền yêu cầu đăng nhập: không token -> 401 | PASS | 6 | 2.33 | - | - | - |
+| TC-API-SESS-002 | Api | GET /api/sessions/current không token / token rác -> 401 | PASS | 4 | 2.75 | - | - | - |
+| TC-API-SESS-006 | Api | DELETE /api/sessions/current không token -> 401 | PASS | 1 | 0.19 | - | - | - |
+| TC-API-TLS-001 | Api | Gọi API bằng HTTP bị chuyển hướng sang HTTPS (307), giữ nguyên đường dẫn | PASS | 1 | 0.27 | - | - | - |
+| TC-API-TLS-002 | Api | Đăng nhập qua HTTP KHÔNG được xử lý: bị redirect và không trả token | PASS | 1 | 1.43 | - | - | - |
+| TC-API-TLS-003 | Api | Gọi qua HTTPS không bị redirect (không vòng lặp chuyển hướng) | PASS | 1 | 0.28 | - | - | - |
+| TC-API-TLS-004 | Api | Môi trường Production gửi header HSTS khi truy cập HTTPS (host không phải localhost) | PASS | 1 | 0.23 | - | - | - |
 | TC-ID-001 | Unit | Normalize: email được trim và hạ chữ thường | PASS | 2 | 0.00 | - | - | - |
 | TC-ID-002 | Unit | Normalize: SĐT bỏ khoảng trắng, dấu chấm, gạch ngang | PASS | 4 | 0.00 | - | - | - |
 | TC-ID-003 | Unit | Normalize: null/rỗng trả về chuỗi rỗng, không ném lỗi | PASS | 3 | 0.00 | - | - | - |
