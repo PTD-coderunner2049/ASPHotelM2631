@@ -185,6 +185,30 @@ public sealed class CounterBookingTests : IDisposable
         Assert.Equal(HttpStatusCode.BadRequest, (await _client.GetAsync($"{Bookings}?from=2026-12-06")).StatusCode);
     }
 
+    [TcFact("TC-API-FR3-008", "Kết hợp từ khóa, trạng thái, kỳ ở và phân trang", Req = "F37",
+        Expected = "Các bộ lọc được áp dụng khi có từ khóa và danh sách phân trang theo ngày nhận rồi mã đặt phòng.")]
+    public async Task BookingSearchAppliesFiltersWhenKeywordIsPresent()
+    {
+        await AuthorizeAsync();
+        var guest = await CreateGuestAsync();
+        var input = Input(guest.Id);
+        var target = await CreateBookingAsync(input);
+        await ConfirmAsync(target.Id, 0);
+        await CreateBookingAsync(input with { RoomId = 2 });
+        var future = await CreateBookingAsync(input with { CheckIn = Departure, CheckOut = Departure.AddDays(2) });
+        await ConfirmAsync(future.Id, 0);
+
+        var filtered = await _client.GetFromJsonAsync<Page<BookingDetails>>(
+            $"{Bookings}?status=Confirmed&search=101&from=2026-12-06&to=2026-12-08&pageSize=1");
+        Assert.Equal(1, filtered!.Total);
+        Assert.Equal(target.Id, Assert.Single(filtered.Items).Id);
+
+        var next = await _client.GetFromJsonAsync<Page<BookingDetails>>(
+            $"{Bookings}?status=Confirmed&search=101&page=2&pageSize=1");
+        Assert.Equal((2, 2, 1), (next!.Total, next.Number, next.Size));
+        Assert.Equal(target.Id, Assert.Single(next.Items).Id);
+    }
+
     private async Task AuthorizeAsync(string role = RoleNames.Receptionist)
     {
         _client.DefaultRequestHeaders.Authorization = null;

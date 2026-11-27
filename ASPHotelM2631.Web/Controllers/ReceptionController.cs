@@ -39,8 +39,8 @@ public sealed class ReceptionController(BookingService bookings, GuestService gu
         guests.UpdateAsync(id, input, cancellationToken);
 
     [HttpGet("bookings")]
-    public Task<Page<BookingDetails>> ListBookings([FromQuery] BookingSearch search, CancellationToken cancellationToken) =>
-        bookings.SearchAsync(search, cancellationToken);
+    public Task<Page<BookingDetails>> ListBookings([FromQuery] BookingSearch filters, CancellationToken cancellationToken) =>
+        bookings.SearchAsync(filters, cancellationToken);
 
     [HttpGet("bookings/{id:int}")]
     public Task<BookingDetails> Booking(int id, CancellationToken cancellationToken) =>

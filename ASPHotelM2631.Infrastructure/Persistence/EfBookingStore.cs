@@ -99,17 +99,9 @@ public sealed class EfBookingStore(AppDbContext db) : IBookingStore, IGuestStore
             await transaction.CommitAsync(cancellationToken);
             return result;
         }
-        catch (DbUpdateConcurrencyException)
+        catch (Exception error) when (error is DbUpdateConcurrencyException || IsSqlDeadlock(error))
         {
-            throw ReservationConflict();
-        }
-        catch (DbUpdateException error) when (error.InnerException is SqlException { Number: 1205 })
-        {
-            throw ReservationConflict();
-        }
-        catch (SqlException error) when (error.Number == 1205)
-        {
-            throw ReservationConflict();
+            throw new BookingException(BookingFailure.Conflict, "Dữ liệu đặt phòng vừa thay đổi. Vui lòng tải lại và thử lại.");
         }
     }
 
@@ -118,6 +110,13 @@ public sealed class EfBookingStore(AppDbContext db) : IBookingStore, IGuestStore
             booking.Status == BookingStatus.CheckedIn) &&
         booking.CheckIn < stay.CheckOut && stay.CheckIn < booking.CheckOut);
 
-    private static BookingException ReservationConflict() =>
-        new(BookingFailure.Conflict, "Dữ liệu đặt phòng vừa thay đổi. Vui lòng tải lại và thử lại.");
+    private static bool IsSqlDeadlock(Exception error)
+    {
+        // EF Core can wrap a SQL Server deadlock in both an execution and an update exception.
+        for (Exception? cause = error; cause is not null; cause = cause.InnerException)
+            if (cause is SqlException { Number: 1205 })
+                return true;
+
+        return false;
+    }
 }
