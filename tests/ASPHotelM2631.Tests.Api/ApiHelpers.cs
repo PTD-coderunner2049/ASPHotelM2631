@@ -81,7 +81,7 @@ public static class ApiHelpers
         using (var scope = f.Services.CreateScope())
         {
             var users = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            var user = new ApplicationUser { UserName = email, Email = email, FullName = $"User {role}" };
+            var user = new ApplicationUser { UserName = email, Email = email, FullName = $"User {role}", EmailConfirmed = true };
             (await users.CreateAsync(user, Password)).ThrowIfFailed();
             (await users.AddToRoleAsync(user, role)).ThrowIfFailed();
         }

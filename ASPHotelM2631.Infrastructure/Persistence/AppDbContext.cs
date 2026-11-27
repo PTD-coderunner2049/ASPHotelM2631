@@ -1,3 +1,4 @@
+using ASPHotelM2631.Domain.Bookings;
 using ASPHotelM2631.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +9,16 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
     : IdentityDbContext<ApplicationUser>(options)
 {
     public DbSet<EmailOtp> EmailOtps => Set<EmailOtp>();
+    public DbSet<Booking> Bookings => Set<Booking>();
+    public DbSet<GuestProfile> Guests => Set<GuestProfile>();
+    public DbSet<Room> Rooms => Set<Room>();
+    public DbSet<RoomType> RoomTypes => Set<RoomType>();
+    public DbSet<SeasonalRate> SeasonalRates => Set<SeasonalRate>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);   // bắt buộc giữ dòng này, nếu không mất các bảng AspNet...
+        BookingModel.Configure(builder);
 
         builder.Entity<EmailOtp>(e =>
         {

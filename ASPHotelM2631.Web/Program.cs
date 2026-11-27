@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using System.Text;
 using ASPHotelM2631.Application.Authentication;
+using ASPHotelM2631.Application.Bookings;
 using ASPHotelM2631.Infrastructure.Identity;
 using ASPHotelM2631.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -76,7 +77,7 @@ namespace ASPHotelM2631.Web
                             var userManager = context.HttpContext.RequestServices
                                 .GetRequiredService<UserManager<ApplicationUser>>();
                             var id = context.Principal?.FindFirstValue("sub");
-                            var stamp = context.Principal?.FindFirstValue("stamp");
+                            var stamp = context.Principal?.FindFirstValue(JwtTokenService.SecurityStampClaim);
                             var user = id is null ? null : await userManager.FindByIdAsync(id);
 
                             if (user is null || user.SecurityStamp != stamp || await userManager.IsLockedOutAsync(user))
@@ -97,6 +98,12 @@ namespace ASPHotelM2631.Web
 
             builder.Services.AddScoped<IEmailVerification, EmailOtpService>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddScoped<EfBookingStore>();
+            builder.Services.AddScoped<IBookingStore>(services => services.GetRequiredService<EfBookingStore>());
+            builder.Services.AddScoped<IGuestStore>(services => services.GetRequiredService<EfBookingStore>());
+            builder.Services.AddScoped<BookingService>();
+            builder.Services.AddScoped<GuestService>();
+            builder.Services.AddSingleton(TimeProvider.System);
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();

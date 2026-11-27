@@ -9,6 +9,8 @@ namespace ASPHotelM2631.Infrastructure.Identity;
 
 public sealed class JwtTokenService(IConfiguration config) : ITokenService
 {
+    public const string SecurityStampClaim = "securityStamp";
+
     public (string Token, DateTime ExpiresAt) CreateToken(
         string userId, string userName, string fullName,
         IEnumerable<string> roles, string securityStamp)
@@ -24,7 +26,7 @@ public sealed class JwtTokenService(IConfiguration config) : ITokenService
             new("sub", userId),
             new("name", userName),
             new("fullName", fullName),
-            new("securityStamp", securityStamp)
+            new(SecurityStampClaim, securityStamp)
         };
 
         claims.AddRange(roles.Select(r => new Claim("role", r)));

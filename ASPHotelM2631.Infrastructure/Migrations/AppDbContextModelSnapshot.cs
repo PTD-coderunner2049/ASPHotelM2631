@@ -22,6 +22,235 @@ namespace ASPHotelM2631.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("ASPHotelM2631.Domain.Bookings.Booking", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("MaDatPhong");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset?>("CancelledAt")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("HuyLuc");
+
+                    b.Property<string>("Channel")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("KenhDatPhong");
+
+                    b.Property<DateOnly>("CheckIn")
+                        .HasColumnType("date")
+                        .HasColumnName("NgayNhan");
+
+                    b.Property<DateOnly>("CheckOut")
+                        .HasColumnType("date")
+                        .HasColumnName("NgayTra");
+
+                    b.Property<string>("CreatedByUserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("NguoiTaoId");
+
+                    b.Property<int>("GuestCount")
+                        .HasColumnType("int")
+                        .HasColumnName("SoKhach");
+
+                    b.Property<int>("GuestId")
+                        .HasColumnType("int")
+                        .HasColumnName("MaKH");
+
+                    b.Property<decimal>("PaidAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("DaThu");
+
+                    b.Property<decimal?>("RefundAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("SoTienHoan");
+
+                    b.Property<int>("RoomId")
+                        .HasColumnType("int")
+                        .HasColumnName("MaPhong");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("TrangThaiDatPhong");
+
+                    b.Property<decimal>("Total")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("TongTien");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("GuestId");
+
+                    b.HasIndex("RoomId", "CheckIn", "CheckOut");
+
+                    b.ToTable("DATPHONG", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_DATPHONG_Ngay", "[NgayTra] > [NgayNhan]");
+
+                            t.HasCheckConstraint("CK_DATPHONG_SoKhach", "[SoKhach] > 0");
+
+                            t.HasCheckConstraint("CK_DATPHONG_Tien", "[TongTien] >= 0 AND [DaThu] >= 0 AND [DaThu] <= [TongTien] AND ([SoTienHoan] IS NULL OR ([SoTienHoan] >= 0 AND [SoTienHoan] <= [DaThu]))");
+                        });
+                });
+
+            modelBuilder.Entity("ASPHotelM2631.Domain.Bookings.GuestProfile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("MaKH");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("HoTen");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("SoDienThoai");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Phone");
+
+                    b.ToTable("KHACHHANG", (string)null);
+                });
+
+            modelBuilder.Entity("ASPHotelM2631.Domain.Bookings.Room", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("MaPhong");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Condition")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("TrangThaiPhong");
+
+                    b.Property<int>("Floor")
+                        .HasColumnType("int")
+                        .HasColumnName("SoTang");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
+                        .HasColumnName("SoPhong");
+
+                    b.Property<int>("RoomTypeId")
+                        .HasColumnType("int")
+                        .HasColumnName("MaLoaiPhong");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Number")
+                        .IsUnique();
+
+                    b.HasIndex("RoomTypeId");
+
+                    b.ToTable("PHONG", (string)null);
+                });
+
+            modelBuilder.Entity("ASPHotelM2631.Domain.Bookings.RoomType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("MaLoaiPhong");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("BaseNightlyRate")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("GiaCoBan");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("TenLoaiPhong");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("TrangThai");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("LOAIPHONG", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_LOAIPHONG_GiaCoBan", "[GiaCoBan] >= 0");
+                        });
+                });
+
+            modelBuilder.Entity("ASPHotelM2631.Domain.Bookings.SeasonalRate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("MaGia");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateOnly>("End")
+                        .HasColumnType("date")
+                        .HasColumnName("NgayKetThuc");
+
+                    b.Property<decimal>("NightlyRate")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("GiaApDung");
+
+                    b.Property<int>("RoomTypeId")
+                        .HasColumnType("int")
+                        .HasColumnName("MaLoaiPhong");
+
+                    b.Property<DateOnly>("Start")
+                        .HasColumnType("date")
+                        .HasColumnName("NgayBatDau");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomTypeId");
+
+                    b.ToTable("GIAMUAVU", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_GIAMUAVU_Gia", "[GiaApDung] >= 0");
+
+                            t.HasCheckConstraint("CK_GIAMUAVU_Ngay", "[NgayKetThuc] >= [NgayBatDau]");
+                        });
+                });
+
             modelBuilder.Entity("ASPHotelM2631.Infrastructure.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -258,6 +487,50 @@ namespace ASPHotelM2631.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ASPHotelM2631.Domain.Bookings.Booking", b =>
+                {
+                    b.HasOne("ASPHotelM2631.Infrastructure.Identity.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("ASPHotelM2631.Domain.Bookings.GuestProfile", "Guest")
+                        .WithMany()
+                        .HasForeignKey("GuestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ASPHotelM2631.Domain.Bookings.Room", "Room")
+                        .WithMany()
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Guest");
+
+                    b.Navigation("Room");
+                });
+
+            modelBuilder.Entity("ASPHotelM2631.Domain.Bookings.Room", b =>
+                {
+                    b.HasOne("ASPHotelM2631.Domain.Bookings.RoomType", "Type")
+                        .WithMany()
+                        .HasForeignKey("RoomTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("ASPHotelM2631.Domain.Bookings.SeasonalRate", b =>
+                {
+                    b.HasOne("ASPHotelM2631.Domain.Bookings.RoomType", null)
+                        .WithMany("Rates")
+                        .HasForeignKey("RoomTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ASPHotelM2631.Infrastructure.Identity.EmailOtp", b =>
                 {
                     b.HasOne("ASPHotelM2631.Infrastructure.Identity.ApplicationUser", null)
@@ -316,6 +589,11 @@ namespace ASPHotelM2631.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ASPHotelM2631.Domain.Bookings.RoomType", b =>
+                {
+                    b.Navigation("Rates");
                 });
 #pragma warning restore 612, 618
         }
