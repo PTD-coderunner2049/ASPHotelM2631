@@ -37,6 +37,10 @@ namespace ASPHotelM2631.Infrastructure.Migrations
                     b.Property<DateTime?>("ActualCheckOut")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("CancelReason")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<DateOnly>("CheckInDate")
                         .HasColumnType("date");
 
@@ -45,8 +49,8 @@ namespace ASPHotelM2631.Infrastructure.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -60,11 +64,21 @@ namespace ASPHotelM2631.Infrastructure.Migrations
                     b.Property<DateTime?>("HoldExpiresAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal>("NightlyRate")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int?>("RoomId")
                         .HasColumnType("int");
 
                     b.Property<int>("RoomTypeId")
                         .HasColumnType("int");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.Property<string>("Source")
                         .IsRequired()
@@ -91,7 +105,12 @@ namespace ASPHotelM2631.Infrastructure.Migrations
 
                     b.HasIndex("RoomTypeId", "CheckInDate", "CheckOutDate");
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Bookings", t =>
+                        {
+                            t.HasCheckConstraint("CK_Booking_Dates", "[CheckOutDate] > [CheckInDate]");
+
+                            t.HasCheckConstraint("CK_Booking_Guests", "[GuestCount] >= 1");
+                        });
                 });
 
             modelBuilder.Entity("ASPHotelM2631.Domain.Entities.Guest", b =>
@@ -112,8 +131,8 @@ namespace ASPHotelM2631.Infrastructure.Migrations
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("IdNumber")
                         .HasMaxLength(50)
@@ -121,8 +140,8 @@ namespace ASPHotelM2631.Infrastructure.Migrations
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("UserId")
                         .HasMaxLength(450)
@@ -488,9 +507,9 @@ namespace ASPHotelM2631.Infrastructure.Migrations
             modelBuilder.Entity("ASPHotelM2631.Domain.Entities.Guest", b =>
                 {
                     b.HasOne("ASPHotelM2631.Infrastructure.Identity.ApplicationUser", null)
-                        .WithOne()
-                        .HasForeignKey("ASPHotelM2631.Domain.Entities.Guest", "UserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("ASPHotelM2631.Domain.Entities.Room", b =>

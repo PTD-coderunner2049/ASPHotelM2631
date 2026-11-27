@@ -2,7 +2,7 @@ using ASPHotelM2631.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ASPHotelM2631.Web.Controllers;
+namespace ASPHotelM2631.Web.Controllers.Authorization;
 
 /// <summary>Route thử phân quyền. Sai vai trò -> 403, chưa đăng nhập -> 401.</summary>
 [ApiController]

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 
-namespace ASPHotelM2631.Web.Controllers;
+namespace ASPHotelM2631.Web.Controllers.Rooms;
 
 /// <summary>API tìm phòng công khai: không cần đăng nhập.</summary>
 [ApiController]

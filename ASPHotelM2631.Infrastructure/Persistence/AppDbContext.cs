@@ -33,16 +33,18 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
         builder.Entity<Guest>(entity =>
         {
             entity.HasKey(guest => guest.GuestId);
-            entity.Property(guest => guest.FullName).HasMaxLength(200).IsRequired();
-            entity.Property(guest => guest.Phone).HasMaxLength(30).IsRequired();
-            entity.Property(guest => guest.Email).HasMaxLength(256).IsRequired();
+            entity.Property(guest => guest.FullName).HasMaxLength(150).IsRequired();
+            entity.Property(guest => guest.Phone).HasMaxLength(20);
+            entity.Property(guest => guest.Email).HasMaxLength(256);
             entity.Property(guest => guest.IdNumber).HasMaxLength(50);
             entity.Property(guest => guest.UserId).HasMaxLength(450);
-            entity.HasIndex(guest => guest.UserId).IsUnique();
+            entity.HasIndex(guest => guest.UserId)
+                .IsUnique()
+                .HasFilter("[UserId] IS NOT NULL");
             entity.HasOne<ApplicationUser>()
-                .WithOne()
-                .HasForeignKey<Guest>(guest => guest.UserId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .WithMany()
+                .HasForeignKey(guest => guest.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         builder.Entity<RoomType>(entity =>
@@ -70,13 +72,24 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
         builder.Entity<Booking>(entity =>
         {
             entity.Property(booking => booking.Id).HasColumnName("BookingId");
-            entity.Property(booking => booking.Code).HasMaxLength(30).IsRequired();
+            entity.Property(booking => booking.Code).HasMaxLength(12).IsRequired();
             entity.HasIndex(booking => booking.Code).IsUnique();
-            entity.Property(booking => booking.TotalAmount).HasPrecision(18, 2);
-            entity.Property(booking => booking.Status).HasConversion<string>().HasMaxLength(20);
+            entity.Property(booking => booking.Status)
+                .HasConversion<string>()
+                .HasMaxLength(20)
+                .IsRequired();
             entity.Property(booking => booking.Source).HasMaxLength(20).IsRequired();
+            entity.Property(booking => booking.CancelReason).HasMaxLength(200);
+            entity.Property(booking => booking.NightlyRate).HasPrecision(18, 2);
+            entity.Property(booking => booking.TotalAmount).HasPrecision(18, 2);
+            entity.Property(booking => booking.RowVersion).IsRowVersion();
             entity.HasIndex(booking => new { booking.RoomId, booking.CheckInDate, booking.CheckOutDate });
             entity.HasIndex(booking => new { booking.RoomTypeId, booking.CheckInDate, booking.CheckOutDate });
+            entity.ToTable(table =>
+            {
+                table.HasCheckConstraint("CK_Booking_Dates", "[CheckOutDate] > [CheckInDate]");
+                table.HasCheckConstraint("CK_Booking_Guests", "[GuestCount] >= 1");
+            });
 
             entity.HasOne(booking => booking.Guest)
                 .WithMany(guest => guest.Bookings)
