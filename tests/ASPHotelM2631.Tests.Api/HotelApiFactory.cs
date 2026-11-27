@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -27,6 +28,7 @@ public sealed class HotelApiFactory : WebApplicationFactory<ASPHotelM2631.Web.Pr
     // Keep integration tests out of Program's Development-only SQL migration path;
     // this factory replaces SQL Server with EF InMemory.
     public string EnvName { get; init; } = "Testing";
+    public TimeProvider? Clock { get; init; }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -42,7 +44,10 @@ public sealed class HotelApiFactory : WebApplicationFactory<ASPHotelM2631.Web.Pr
                                            d.ServiceType.GenericTypeArguments.Contains(typeof(AppDbContext)))).ToList();
             foreach (var d in old) services.Remove(d);
 
-            services.AddDbContext<AppDbContext>(o => o.UseInMemoryDatabase(_dbName));
+            services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(_dbName)
+                .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning)));
+            if (Clock is { } clock)
+                services.Replace(ServiceDescriptor.Singleton(clock));
             services.RemoveAll<IEmailSender>();
             services.AddSingleton<IEmailSender, CapturingEmailSender>();
         });
