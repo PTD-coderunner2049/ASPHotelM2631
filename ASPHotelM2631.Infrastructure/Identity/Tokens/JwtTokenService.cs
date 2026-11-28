@@ -5,7 +5,7 @@ using ASPHotelM2631.Application.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace ASPHotelM2631.Infrastructure.Identity;
+namespace ASPHotelM2631.Infrastructure.Identity.Tokens;
 
 public sealed class JwtTokenService(IConfiguration config) : ITokenService
 {

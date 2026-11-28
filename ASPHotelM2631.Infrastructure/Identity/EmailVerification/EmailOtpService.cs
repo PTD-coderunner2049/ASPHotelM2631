@@ -1,12 +1,13 @@
 using System.Security.Cryptography;
 using System.Text;
 using ASPHotelM2631.Application.Authentication;
+using ASPHotelM2631.Infrastructure.Identity;
 using ASPHotelM2631.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace ASPHotelM2631.Infrastructure.Identity;
+namespace ASPHotelM2631.Infrastructure.Identity.EmailVerification;
 
 public sealed class EmailOtpService(
     UserManager<ApplicationUser> users,

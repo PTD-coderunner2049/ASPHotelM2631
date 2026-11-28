@@ -1,16 +1,20 @@
 using System.Security.Claims;
 using ASPHotelM2631.Application.Authentication;
 using ASPHotelM2631.Domain.Constants;
+using ASPHotelM2631.Domain.Entities;
+using ASPHotelM2631.Infrastructure.Identity;
+using ASPHotelM2631.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace ASPHotelM2631.Infrastructure.Identity;
+namespace ASPHotelM2631.Infrastructure.Identity.Accounts;
 
 public sealed class IdentityAccountStore(
     UserManager<ApplicationUser> users,
     RoleManager<IdentityRole> roles,
+    AppDbContext db,
     SignInManager<ApplicationUser> signIn,
     ITokenService tokens,
     IEmailVerification verification,
@@ -38,16 +42,28 @@ public sealed class IdentityAccountStore(
                 : AuthenticationStatus.InvalidInput;
 
         // 2. Gán vai trò; lỗi thì xóa user vừa tạo để không để lại tài khoản mồ côi
+        Guest? guestProfile = null;
         try
         {
             var roleResult = await users.AddToRoleAsync(user, RoleNames.Customer);
             if (!roleResult.Succeeded)
                 throw new InvalidOperationException(
                     "Không gán được vai trò: " + string.Join("; ", roleResult.Errors.Select(e => e.Description)));
+            guestProfile = new Guest
+            {
+                UserId = user.Id,
+                FullName = fullName,
+                Phone = isEmail ? "" : identifier,
+                Email = isEmail ? identifier : ""
+            };
+            db.Guests.Add(guestProfile);
+            await db.SaveChangesAsync();
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Gán vai trò thất bại, xóa tài khoản {User} vừa tạo", identifier);
+            if (guestProfile is not null)
+                db.Entry(guestProfile).State = EntityState.Detached;
             await users.DeleteAsync(user);
             throw;
         }
@@ -71,7 +87,7 @@ public sealed class IdentityAccountStore(
     public async Task<LoginResult> SignInAsync(string identifier, string password)
     {
         var user = await users.FindByNameAsync(identifier);
-        if (user is null) return AuthenticationStatus.InvalidCredentials;
+        if (user is null || !user.IsActive) return AuthenticationStatus.InvalidCredentials;
 
         var result = await signIn.CheckPasswordSignInAsync(user, password, lockoutOnFailure: true);
         if (result.IsLockedOut) return AuthenticationStatus.LockedOut;

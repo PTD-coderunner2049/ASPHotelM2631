@@ -7,8 +7,3 @@ public interface IEmailVerification
 
     Task<AuthenticationStatus> ConfirmAsync(string identifier, string code);
 }
-
-public interface IEmailSender
-{
-    Task SendAsync(string to, string subject, string htmlBody);
-}

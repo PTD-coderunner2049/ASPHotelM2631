@@ -1,6 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using ASPHotelM2631.Infrastructure.Identity;
+using ASPHotelM2631.Infrastructure.Identity.Tokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Xunit;

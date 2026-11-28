@@ -3,7 +3,7 @@ using ASPHotelM2631.Application.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ASPHotelM2631.Web.Controllers;
+namespace ASPHotelM2631.Web.Controllers.Authorization;
 
 [ApiController]
 [Route("api")]
