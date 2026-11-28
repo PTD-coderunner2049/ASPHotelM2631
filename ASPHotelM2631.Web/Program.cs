@@ -4,6 +4,7 @@ using System.Threading.RateLimiting;
 using ASPHotelM2631.Application.Bookings;
 using ASPHotelM2631.Application.Authentication;
 using ASPHotelM2631.Application.Rooms;
+using ASPHotelM2631.Application.Payments;
 using ASPHotelM2631.Infrastructure.Identity;
 using ASPHotelM2631.Infrastructure.Identity.Accounts;
 using ASPHotelM2631.Infrastructure.Identity.EmailVerification;
@@ -12,7 +13,9 @@ using ASPHotelM2631.Infrastructure.Identity.Tokens;
 using ASPHotelM2631.Infrastructure.Persistence;
 using ASPHotelM2631.Infrastructure.Persistence.Bookings;
 using ASPHotelM2631.Infrastructure.Persistence.Rooms;
+using ASPHotelM2631.Infrastructure.Persistence.Payments;
 using ASPHotelM2631.Infrastructure.Persistence.Seeding;
+using ASPHotelM2631.Infrastructure.Payments;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -134,6 +137,11 @@ public class Program
         // Booking services
         builder.Services.AddScoped<IBookingStore, BookingStore>();
         builder.Services.AddScoped<IBookingService, BookingService>();
+
+        // Payment services
+        builder.Services.AddScoped<IPaymentStore, PaymentStore>();
+        builder.Services.AddScoped<IPaymentGateway, StripeGateway>();
+        builder.Services.AddScoped<IPaymentService, PaymentService>();
 
         // Limit public search requests by client IP (default: 60 requests per minute).
         builder.Services.AddRateLimiter(options =>

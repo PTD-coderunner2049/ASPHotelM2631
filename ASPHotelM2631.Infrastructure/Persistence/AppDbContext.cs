@@ -13,6 +13,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<RoomType> RoomTypes => Set<RoomType>();
     public DbSet<Room> Rooms => Set<Room>();
     public DbSet<Booking> Bookings => Set<Booking>();
+    public DbSet<Payment> Payments => Set<Payment>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -105,5 +106,29 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
         });
+
+        builder.Entity<Payment>(entity =>
+        {
+            entity.HasKey(payment => payment.PaymentId);
+            entity.Property(payment => payment.Type).HasMaxLength(20).IsRequired();
+            entity.Property(payment => payment.Method).HasMaxLength(20).IsRequired();
+            entity.Property(payment => payment.Status).HasMaxLength(20).IsRequired();
+            entity.Property(payment => payment.Amount).HasPrecision(18, 2);
+            entity.Property(payment => payment.GatewayRef).HasMaxLength(50);
+            entity.Property(payment => payment.TxnRef).HasMaxLength(50).IsRequired();
+            entity.Property(payment => payment.ResponseCode).HasMaxLength(10);
+            entity.HasIndex(payment => payment.TxnRef).IsUnique();
+            entity.HasIndex(payment => payment.GatewayRef)
+                .IsUnique()
+                .HasFilter("[GatewayRef] IS NOT NULL");
+            entity.HasIndex(payment => payment.BookingId);
+            entity.HasOne(payment => payment.Booking)
+                .WithMany()
+                .HasForeignKey(payment => payment.BookingId)
+                .OnDelete(DeleteBehavior.Restrict);
+            entity.ToTable(table =>
+                table.HasCheckConstraint("CK_Payment_Amount", "[Amount] > 0"));
+        });
+
     }
 }

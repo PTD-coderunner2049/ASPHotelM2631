@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using System.Security.Cryptography;
 using ASPHotelM2631.Application.Bookings;
 using ASPHotelM2631.Domain.Entities;
-using ASPHotelM2631.Infrastructure.Persistence.Rooms;   // RoomAvailability: đổi nếu bạn đặt ở nơi khác
+using ASPHotelM2631.Infrastructure.Persistence.Rooms;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 

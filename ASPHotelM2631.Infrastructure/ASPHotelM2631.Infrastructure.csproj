@@ -9,6 +9,7 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="MailKit" Version="5.0.0" />
+    <PackageReference Include="Stripe.net" Version="53.2.0" />
     <ProjectReference Include="..\ASPHotelM2631.Application\ASPHotelM2631.Application.csproj" />
     <ProjectReference Include="..\ASPHotelM2631.Domain\ASPHotelM2631.Domain.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.23" />
